@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
-import { StyleSheet, Text, View, Image, Button, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, ActivityIndicator } from 'react-native'
 import { getAllChampionsInfo } from '../lib/metacritic'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Constants from 'expo-constants'
+import ChampionCard from './ChampionCard'
 
 export default function Main() {
   const insets = useSafeAreaInsets()
@@ -13,32 +14,24 @@ export default function Main() {
   }, [])
 
   return (
-    <View style={[styles.container, { marginTop: insets.top, marginBottom: insets.bottom }]}>
+    <View
+      style={[
+        styles.container,
+        { marginTop: insets.top === 0 ? 50 : insets.top, marginBottom: insets.bottom }
+      ]}>
       <Text style={styles.title}>LOL champions {Constants.deviceName}</Text>
       <ScrollView style={{ height: '100%', width: '100%' }}>
-        {champions.map((champ) => (
-          <View key={champ.name} style={styles.card}>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'start'
-              }}>
-              <Image
-                source={{
-                  uri: `https://ddragon.leagueoflegends.com/cdn/15.21.1/img/champion/${champ.image.full}`
-                }}
-                style={styles.image}
-              />
-              <View style={styles.info}>
-                <Text style={styles.info.name}>{champ.name}</Text>
-                <Text style={styles.info.title}>{champ.title}</Text>
-                <Text>difficulty: {champ.info.difficulty}</Text>
-              </View>
-            </View>
-            <Button title="View Details" onPress={() => alert(champ.name)} />
-          </View>
-        ))}
+        {champions.length === 0 ? (
+          <ActivityIndicator size="large" color="#0000ff" />
+        ) : (
+          champions.map((champion) => (
+            <ChampionCard
+              key={champion.name}
+              champion={champion}
+              onPress={() => alert(champion.name)}
+            />
+          ))
+        )}
       </ScrollView>
     </View>
   )
@@ -59,37 +52,11 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
     marginRight: 'auto'
   },
-  image: {
-    width: 60,
-    height: 60,
-    marginBottom: 5,
-    borderRadius: 10
-  },
   title: {
     fontSize: 30,
     fontWeight: 'bold',
     width: '100%',
     paddingBottom: 20
   },
-  card: {
-    borderRadius: 10,
-    width: '100%',
-    marginBottom: 20,
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between'
-  },
-  info: {
-    paddingLeft: 10,
-    name: {
-      fontSize: 20,
-      fontWeight: 'bold'
-    },
-    title: {
-      fontSize: 16,
-      fontWeight: 'normal',
-      maxWidth: 110
-    }
-  }
+  info: {}
 })
