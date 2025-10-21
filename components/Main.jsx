@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, Image, Button, ScrollView } from 'react-native'
 import { getAllChampionsInfo } from '../lib/metacritic'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Constants from 'expo-constants'
 
 export default function Main() {
+  const insets = useSafeAreaInsets()
   const [champions, setChampions] = useState([])
 
   useEffect(() => {
@@ -11,7 +13,7 @@ export default function Main() {
   }, [])
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { marginTop: insets.top, marginBottom: insets.bottom }]}>
       <Text style={styles.title}>LOL champions {Constants.deviceName}</Text>
       <ScrollView style={{ height: '100%', width: '100%' }}>
         {champions.map((champ) => (
@@ -55,8 +57,7 @@ const styles = StyleSheet.create({
     justifyContent: 'start',
     width: '80%',
     marginLeft: 'auto',
-    marginRight: 'auto',
-    marginTop: Constants.statusBarHeight === 0 ? 50 : Constants.statusBarHeight
+    marginRight: 'auto'
   },
   image: {
     width: 60,
