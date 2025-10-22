@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
-import { StyleSheet, Text, View, ScrollView, ActivityIndicator } from 'react-native'
+import { StyleSheet, Text, View, FlatList } from 'react-native'
 import { getAllChampionsInfo } from '../lib/metacritic'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Constants from 'expo-constants'
 import ChampionCard from './ChampionCard'
-
+import { Logo } from './icons/logo'
 export default function Main() {
   const insets = useSafeAreaInsets()
   const [champions, setChampions] = useState([])
@@ -19,20 +19,26 @@ export default function Main() {
         styles.container,
         { marginTop: insets.top === 0 ? 50 : insets.top, marginBottom: insets.bottom }
       ]}>
-      <Text style={styles.title}>LOL champions {Constants.deviceName}</Text>
-      <ScrollView style={{ height: '100%', width: '100%' }}>
-        {champions.length === 0 ? (
-          <ActivityIndicator size="large" color="#0000ff" />
-        ) : (
-          champions.map((champion) => (
-            <ChampionCard
-              key={champion.name}
-              champion={champion}
-              onPress={() => alert(champion.name)}
-            />
-          ))
-        )}
-      </ScrollView>
+      <View
+        style={[
+          styles.title,
+          {
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'flex-start'
+          }
+        ]}>
+        <Logo style={styles.logo} />
+        <Text style={styles.title}>champions {Constants.deviceName.split(' ')[0]}</Text>
+      </View>
+
+      <FlatList
+        data={champions}
+        renderItem={({ item }) => <ChampionCard champion={item} onPress={() => alert(item.name)} />}
+        keyExtractor={(item) => item.name}
+        style={{ width: '100%', height: '100%' }}
+      />
     </View>
   )
 }
@@ -53,10 +59,13 @@ const styles = StyleSheet.create({
     marginRight: 'auto'
   },
   title: {
-    fontSize: 30,
+    fontSize: 24,
     fontWeight: 'bold',
-    width: '100%',
-    paddingBottom: 20
+    width: '100%'
   },
-  info: {}
+  logo: {
+    width: 100,
+    height: 100,
+    fill: '#c28f2b'
+  }
 })

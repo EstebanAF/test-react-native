@@ -1,9 +1,20 @@
-import React from 'react'
-import { StyleSheet, View, Text, Image, Button } from 'react-native'
+import React, { useRef, useEffect } from 'react'
+import { StyleSheet, View, Text, Image, Button, Animated } from 'react-native'
 
-export default function ChampionCard({ champion, onPress }) {
+export default function ChampionCard({ champion, onPress, index }) {
+  const opacity = useRef(new Animated.Value(0)).current
+
+  useEffect(() => {
+    Animated.timing(opacity, {
+      toValue: 1,
+      duration: 500,
+      delay: index * 500,
+      useNativeDriver: true
+    }).start()
+  }, [opacity, index])
+
   return (
-    <View style={styles.card}>
+    <Animated.View style={[styles.card, { opacity }]}>
       <View style={styles.header}>
         <Image
           source={{
@@ -18,7 +29,7 @@ export default function ChampionCard({ champion, onPress }) {
         </View>
       </View>
       <Button title="View Details" onPress={onPress} />
-    </View>
+    </Animated.View>
   )
 }
 
