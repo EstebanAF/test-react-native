@@ -30,7 +30,9 @@ export default function Main() {
           }
         ]}>
         <Logo style={styles.logo} />
-        <Text style={styles.title}>champions {Constants.deviceName.split(' ')[0]}</Text>
+        <Text className="text-3xl font-bold text-red-500">
+          champions {Constants.deviceName.split(' ')[0]}
+        </Text>
       </View>
 
       <FlatList
