@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react'
-import { StyleSheet, Text, View, FlatList } from 'react-native'
+import { StyleSheet, Text, View, FlatList, Pressable } from 'react-native'
 import { getAllChampionsInfo } from '../lib/metacritic'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Constants from 'expo-constants'
 import ChampionCard from './ChampionCard'
 import { Logo } from './icons/logo'
+import { Link } from 'expo-router'
+import Entypo from '@expo/vector-icons/Entypo'
+
 export default function Main() {
   const insets = useSafeAreaInsets()
   const [champions, setChampions] = useState([])
@@ -14,27 +17,15 @@ export default function Main() {
   }, [])
 
   return (
-    <View
-      style={[
-        styles.container,
-        { marginTop: insets.top === 0 ? 50 : insets.top, marginBottom: insets.bottom }
-      ]}>
-      <View
-        style={[
-          styles.title,
-          {
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'flex-start'
-          }
-        ]}>
-        <Logo style={styles.logo} />
-        <Text className="text-3xl font-bold text-red-500">
-          champions {Constants.deviceName.split(' ')[0]}
-        </Text>
+    <View style={[styles.container]}>
+      <View className="flex-row gap-2">
+        <Link asChild href="/about">
+          <Pressable className="flex-row items-center gap-2">
+            <Entypo name="info-with-circle" size={24} color="" />
+            <Text className="text-2xl font-bold">About</Text>
+          </Pressable>
+        </Link>
       </View>
-
       <FlatList
         data={champions}
         renderItem={({ item }) => <ChampionCard champion={item} onPress={() => alert(item.name)} />}
@@ -47,12 +38,12 @@ export default function Main() {
 
 const styles = StyleSheet.create({
   body: {
-    backgroundColor: '#ffeeee',
+    backgroundColor: 'white',
     width: '100%',
     height: '100%'
   },
   container: {
-    backgroundColor: '#ffeeee',
+    backgroundColor: 'white',
     flexDirection: 'column',
     alignItems: 'start',
     justifyContent: 'start',

@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react'
-import { StyleSheet, View, Text, Image, Button, Animated } from 'react-native'
+import { StyleSheet, View, Text, Button, Animated, Pressable, Image } from 'react-native'
+import { Link } from 'expo-router'
 
 export default function ChampionCard({ champion, onPress, index }) {
   const opacity = useRef(new Animated.Value(0)).current
@@ -14,22 +15,26 @@ export default function ChampionCard({ champion, onPress, index }) {
   }, [opacity, index])
 
   return (
-    <Animated.View style={[styles.card, { opacity }]}>
-      <View style={styles.header}>
-        <Image
-          source={{
-            uri: `https://ddragon.leagueoflegends.com/cdn/15.21.1/img/champion/${champion.image.full}`
-          }}
-          style={styles.image}
-        />
-        <View style={styles.info}>
-          <Text style={styles.infoName}>{champion.name}</Text>
-          <Text style={styles.infoTitle}>{champion.title}</Text>
-          <Text>difficulty: {champion.info.difficulty}</Text>
-        </View>
-      </View>
-      <Button title="View Details" onPress={onPress} />
-    </Animated.View>
+    <Link asChild href={`/${champion.name.toLowerCase()}`}>
+      <Pressable>
+        <Animated.View style={styles.card}>
+          <View style={styles.header}>
+            <Image
+              source={{
+                uri: `https://ddragon.leagueoflegends.com/cdn/15.21.1/img/champion/${champion.image.full}`
+              }}
+              style={styles.image}
+            />
+            <View style={styles.info}>
+              <Text style={styles.infoName}>{champion.name}</Text>
+              <Text style={styles.infoTitle}>{champion.title}</Text>
+              <Text>difficulty: {champion.info.difficulty}</Text>
+            </View>
+          </View>
+          <Button title="View Details" onPress={onPress} />
+        </Animated.View>
+      </Pressable>
+    </Link>
   )
 }
 
