@@ -1,9 +1,10 @@
 import { View, Text, Pressable, Image, ScrollView } from 'react-native'
 import { useState, useEffect } from 'react'
-import { useLocalSearchParams } from 'expo-router'
+import { useLocalSearchParams, Stack } from 'expo-router'
 import Fontisto from '@expo/vector-icons/Fontisto'
 import { Link } from 'expo-router'
 import { getChampionInfo } from '../lib/metacritic'
+import Screen from '../components/Screen'
 
 export default function ChampionDetails() {
   const { id } = useLocalSearchParams()
@@ -11,7 +12,11 @@ export default function ChampionDetails() {
 
   // Use effect to load champion info asynchronously, rendering all info per @file_context_0
 
-  return <ChampionDetailsContent id={id} />
+  return (
+    <Screen>
+      <ChampionDetailsContent id={id} />
+    </Screen>
+  )
 
   function ChampionDetailsContent({ id }) {
     const [champion, setChampion] = useState(null)
@@ -48,7 +53,7 @@ export default function ChampionDetails() {
     }
 
     return (
-      <View className="p-5">
+      <View className="p-5 pb-24">
         {/* Home link */}
         <Link asChild href="/" className="mb-5 justify-center items-center">
           <Pressable className="mb-3">

@@ -1,12 +1,9 @@
 import { useState, useEffect } from 'react'
-import { StyleSheet, Text, View, FlatList, Pressable } from 'react-native'
+import { StyleSheet, FlatList } from 'react-native'
 import { getAllChampionsInfo } from '../lib/metacritic'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import Constants from 'expo-constants'
 import ChampionCard from './ChampionCard'
-import { Logo } from './icons/logo'
-import { Link } from 'expo-router'
-import Entypo from '@expo/vector-icons/Entypo'
+import Screen from './Screen'
 
 export default function Main() {
   const insets = useSafeAreaInsets()
@@ -17,22 +14,14 @@ export default function Main() {
   }, [])
 
   return (
-    <View style={[styles.container]}>
-      <View className="flex-row gap-2">
-        <Link asChild href="/about">
-          <Pressable className="flex-row items-center gap-2">
-            <Entypo name="info-with-circle" size={24} color="" />
-            <Text className="text-2xl font-bold">About</Text>
-          </Pressable>
-        </Link>
-      </View>
+    <Screen>
       <FlatList
         data={champions}
         renderItem={({ item }) => <ChampionCard champion={item} onPress={() => alert(item.name)} />}
         keyExtractor={(item) => item.name}
-        style={{ width: '100%', height: '100%' }}
+        className="w-full h-full p-8"
       />
-    </View>
+    </Screen>
   )
 }
 
@@ -47,7 +36,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'start',
     justifyContent: 'start',
-    width: '80%',
+    width: '100%',
     marginLeft: 'auto',
     marginRight: 'auto'
   },
